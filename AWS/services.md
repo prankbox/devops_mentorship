@@ -5,22 +5,23 @@
 - Availability zones
 
 ## Services
-- EC2
+- EC2 (virtual machines)
+- EBS (Attachable Elastic Block Storage)
 - Elastic Load Balancer (ELB)
 - Elastic Beanstalk
-- CloudFront
-- CloudWatch
-- S3
-- Glacier
+- CloudFront (CDN)
+- CloudWatch (monitoring)
+- S3 (Object Storage)
+- Glacier (S3 deep storage. Takes hours to retrive data)
 - Elastic File System (EFS)
-- CloudFornation
+- CloudFormation (Amazon IaC)
 - OpsWorks (Chef under the hood)
-- RDS
+- RDS (Relational databases)
 - DynamoDB (nosql)
 - Redshift (analytics)
 - Elastic Map Reduce (bigdata)
-- IAM
-- VPC
+- IAM (Identity Access Management)
+- VPC (Virtual Private Cloud)
 - Route53 (DNS)
 - SES (email service)
 - SNS (notification service)
