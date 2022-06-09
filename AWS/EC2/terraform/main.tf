@@ -11,7 +11,7 @@ terraform {
 
 #Region
 provider "aws" {
-  region  = var.region
+  region = var.region
 }
 
 # Using module myip to secure ssh access
@@ -125,8 +125,37 @@ resource "aws_instance" "prank-amazon-control" {
   availability_zone           = data.aws_availability_zones.available.names[0]
   associate_public_ip_address = true
   key_name                    = aws_key_pair.ssh_key.key_name
+  user_data                   = <<EOF
+    #!/bin/bash
+    sudo yum update -y
+    sudo yum install httpd -y
+    sudo systemctl start httpd
+    sudo systemctl enable httpd
+    echo "<h1>Deployed with Terraform</h1>" | sudo tee /var/www/html/index.html
+  EOF
+
 
   tags = {
     Name = "${var.prefix}-Control-Linux"
   }
+}
+
+resource "null_resource" "index" {
+
+  provisioner "remote-exec" {
+    inline = [
+      "until [ -f /var/www/html/index.html ]; do sleep 5;done",
+      "sudo sh -c \"echo '<p> The ip address is: ${aws_instance.prank-amazon-control.public_ip} </p>' >> /var/www/html/index.html\"",
+      "sudo sh -c \"echo '<p> The hostname is: ${aws_instance.prank-amazon-control.public_dns} </p>' >> /var/www/html/index.html\""
+    ]
+    connection {
+      type        = "ssh"
+      user        = "ec2-user"
+      host        = aws_instance.prank-amazon-control.public_ip
+      private_key = file(var.ssh_key)
+    }
+
+
+  }
+  depends_on = [aws_instance.prank-amazon-control]
 }

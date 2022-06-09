@@ -41,6 +41,11 @@ variable "mykey" {
 
 }
 
+variable "ssh_key" {
+  default = "/Users/sergey/.ssh/aws_rsa"
+
+}
+
 variable "name" {
   default = "random"
 }
