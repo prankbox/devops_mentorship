@@ -196,3 +196,9 @@ terraform.rc
 
 .terraform.lock.hcl
 .vscode
+*~
+*.swp
+*.lock
+*.orig
+*.retry
+.DS_Store
