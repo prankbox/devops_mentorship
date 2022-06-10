@@ -202,3 +202,4 @@ terraform.rc
 *.orig
 *.retry
 .DS_Store
+ansible-env/
