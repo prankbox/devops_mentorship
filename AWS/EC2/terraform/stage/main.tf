@@ -35,13 +35,13 @@ data "aws_ami" "amazon_linux" {
 }
 
 resource "aws_key_pair" "ssh_key" {
-  key_name   = "server-key"
+  key_name   = "${var.prefix}-server-key"
   public_key = file(var.mykey)
 
 }
 
 # Main VPC
-resource "aws_vpc" "eprank_vpc" {
+resource "aws_vpc" "stage_vpc" {
   cidr_block           = var.vpc_cider
   enable_dns_hostnames = true
   tags = {
@@ -50,16 +50,16 @@ resource "aws_vpc" "eprank_vpc" {
 }
 
 #Gateway 1
-resource "aws_internet_gateway" "eprank_gw" {
-  vpc_id = aws_vpc.eprank_vpc.id
+resource "aws_internet_gateway" "stage_gw" {
+  vpc_id = aws_vpc.stage_vpc.id
   tags = {
     Name = "${var.prefix}-GW"
   }
 }
 
 #Subnet 1
-resource "aws_subnet" "eprank_subnet_1" {
-  vpc_id            = aws_vpc.eprank_vpc.id
+resource "aws_subnet" "stage_subnet_1" {
+  vpc_id            = aws_vpc.stage_vpc.id
   cidr_block        = var.subnet_1_cider
   availability_zone = data.aws_availability_zones.available.names[0]
   tags = {
@@ -68,12 +68,12 @@ resource "aws_subnet" "eprank_subnet_1" {
 }
 
 #Routing table 1
-resource "aws_route_table" "eprank_route_table_1" {
-  vpc_id = aws_vpc.eprank_vpc.id
+resource "aws_route_table" "stage_route_table_1" {
+  vpc_id = aws_vpc.stage_vpc.id
 
   route {
     cidr_block = var.inet_cidr
-    gateway_id = aws_internet_gateway.eprank_gw.id
+    gateway_id = aws_internet_gateway.stage_gw.id
   }
   tags = {
     Name = "${var.prefix}-RT-1"
@@ -81,14 +81,14 @@ resource "aws_route_table" "eprank_route_table_1" {
 }
 
 # RT association 1
-resource "aws_route_table_association" "eprank_rt_asc_1" {
-  subnet_id      = aws_subnet.eprank_subnet_1.id
-  route_table_id = aws_route_table.eprank_route_table_1.id
+resource "aws_route_table_association" "stage_rt_asc_1" {
+  subnet_id      = aws_subnet.stage_subnet_1.id
+  route_table_id = aws_route_table.stage_route_table_1.id
 }
 
-resource "aws_security_group" "eprank_ec2_sg" {
-  name   = "eprank-sg-EC2"
-  vpc_id = aws_vpc.eprank_vpc.id
+resource "aws_security_group" "stage_ec2_sg" {
+  name   = "stage-sg-EC2"
+  vpc_id = aws_vpc.stage_vpc.id
 
   ingress {
     from_port   = 22
@@ -120,8 +120,8 @@ resource "aws_security_group" "eprank_ec2_sg" {
 resource "aws_instance" "prank-amazon-control" {
   ami                         = data.aws_ami.amazon_linux.id
   instance_type               = var.instance_type
-  subnet_id                   = aws_subnet.eprank_subnet_1.id
-  vpc_security_group_ids      = [aws_security_group.eprank_ec2_sg.id]
+  subnet_id                   = aws_subnet.stage_subnet_1.id
+  vpc_security_group_ids      = [aws_security_group.stage_ec2_sg.id]
   availability_zone           = data.aws_availability_zones.available.names[0]
   associate_public_ip_address = true
   key_name                    = aws_key_pair.ssh_key.key_name
@@ -136,7 +136,7 @@ resource "aws_instance" "prank-amazon-control" {
 
 
   tags = {
-    Name = "${var.prefix}-Control-Linux"
+    Name = "${var.prefix}-Control-Plane"
   }
 }
 

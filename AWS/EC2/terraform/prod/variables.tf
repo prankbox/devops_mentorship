@@ -1,5 +1,5 @@
 variable "prefix" {
-  default = "Eprank"
+  default = "Prod"
 }
 
 variable "vpc_cider" {
