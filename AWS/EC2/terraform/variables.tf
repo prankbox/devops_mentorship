@@ -37,12 +37,12 @@ variable "the_key" {
 }
 
 variable "mykey" {
-  default = "/Users/sergey/.ssh/aws_rsa.pub"
+  type = string
 
 }
 
 variable "ssh_key" {
-  default = "/Users/sergey/.ssh/aws_rsa"
+  type = string
 
 }
 
