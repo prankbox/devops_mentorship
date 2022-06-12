@@ -20,7 +20,7 @@ variable "subnet_3_cider" {
 }
 
 variable "region" {
-  default = "us-east-1"
+  default = "us-west-2"
 }
 
 variable "inet_cidr" {
