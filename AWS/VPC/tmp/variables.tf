@@ -24,26 +24,44 @@ variable "vpcs" {
 }
 
 variable "subnets" {
-    type = map(object({
+    type = map(map(object({
         cidr = string
         az = string
         tags = map(string)
-    }))
+    })))
     default = {
+      
+     RU = {      
       "Public-A" = {
         az = "us-east-1a"
         cidr = "10.0.1.0/24"
         tags = {
-          "Name" = "Public-A"
+          "Name" = "RU-Public-A"
+        }
+        }
+        "Public-B" = {
+          az = "us-east-1b"
+          cidr = "10.0.2.0/24"
+          tags = {
+            "Name" = "RU-Public-B"
+          }
+        }
+      },
+      UZ = {
+        "Public-A" = {
+          az = "us-east-1a"
+          cidr = "192.168.1.0/24"
+          tags = {
+            "Name" = "UZ-Public-A"
+          }
+        }
+        "Public-B" = {
+          az = "us-east-1b"
+          cidr = "192.168.2.0/24"
+          tags = {
+            "Name" = "UZ-Public-B"
+          }
         }
       }
-      "Public-B" = {
-        az = "us-east-1b"
-        cidr = "10.0.2.0/24"
-        tags = {
-          "Name" = "Public-B"
-        }
-      }
-    }
-  
+    }  
 }

@@ -13,6 +13,19 @@ data "aws_availability_zones" "available" {
   state = "available"
 }
 
+locals {
+
+  flat_subnets = merge([
+        for vpck, vpcv in var.vpcs: {
+          for subnetk, subnetv in var.subnets[vpck]: 
+            "${vpck}-${subnetk}" => {
+                vpc_key = vpck
+                subnet = subnetv
+            }
+          }
+      ]...)
+
+}
 
 resource "aws_vpc" "main" {
     for_each = var.vpcs
@@ -32,7 +45,12 @@ resource "aws_internet_gateway" "main" {
 }
 
 resource "aws_subnet" "public" {
-
-  
+    for_each = local.flat_subnets
+    
+    vpc_id     = aws_vpc.main[each.value.vpc_key].id
+    cidr_block = each.value.subnet.cidr
+    availability_zone = each.value.subnet.az
+    
+    tags = each.value.subnet.tags
 }
 
