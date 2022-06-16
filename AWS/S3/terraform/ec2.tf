@@ -24,15 +24,17 @@ resource "aws_instance" "control_plane" {
   vpc_security_group_ids      = [aws_security_group.public_a_sg.id]
   availability_zone           = data.aws_availability_zones.available.names[0]
   associate_public_ip_address = true
+  iam_instance_profile = aws_iam_instance_profile.ec2_profile.name
   key_name                    = aws_key_pair.ssh_key.key_name
-  #   user_data                   = <<EOF
-  #     #!/bin/bash
-  #     sudo yum update -y
-  #     sudo yum install httpd -y
-  #     sudo systemctl start httpd
-  #     sudo systemctl enable httpd
-  #     echo "<h1>Deployed with Terraform</h1>" | sudo tee /var/www/html/index.html
-  #   EOF
+  user_data                   = <<EOF
+      #!/bin/bash
+      sudo amazon-linux-extras install epel -y
+      sudo yum update -y
+      sudo yum install s3fs-fuse nginx
+      sudo chown -R nginx /var/log/nginx
+      sudo s3fs ${local.s3_bucket_name} /var/log/nginx -o iam_role=S3Full -o allow_other -o use_cache=/tmp/cache
+      sudo systemct enable nginx --now
+    EOF
 
 
   tags = {

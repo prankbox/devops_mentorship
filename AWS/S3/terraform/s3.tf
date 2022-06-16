@@ -1,7 +1,7 @@
 resource "random_string" "suffix" {
   length  = 3
   special = false
-  upper = false
+  upper   = false
 }
 
 locals {
@@ -9,7 +9,7 @@ locals {
 }
 
 resource "aws_s3_bucket" "bucket" {
-  bucket = local.s3_bucket_name
+  bucket        = local.s3_bucket_name
   force_destroy = true
   tags = {
     "Name"        = "${local.s3_bucket_name}"
