@@ -53,6 +53,14 @@ resource "aws_security_group" "public_a_sg" {
     to_port     = 22
   }
 
+  ingress {
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "http access"
+    from_port   = 80
+    protocol    = "tcp"
+    to_port     = 80
+  }
+
   egress {
     from_port    = 0
     to_port      = 0
