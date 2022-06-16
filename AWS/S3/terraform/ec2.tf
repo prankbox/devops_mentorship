@@ -25,14 +25,14 @@ resource "aws_instance" "control_plane" {
   availability_zone           = data.aws_availability_zones.available.names[0]
   associate_public_ip_address = true
   key_name                    = aws_key_pair.ssh_key.key_name
-#   user_data                   = <<EOF
-#     #!/bin/bash
-#     sudo yum update -y
-#     sudo yum install httpd -y
-#     sudo systemctl start httpd
-#     sudo systemctl enable httpd
-#     echo "<h1>Deployed with Terraform</h1>" | sudo tee /var/www/html/index.html
-#   EOF
+  #   user_data                   = <<EOF
+  #     #!/bin/bash
+  #     sudo yum update -y
+  #     sudo yum install httpd -y
+  #     sudo systemctl start httpd
+  #     sudo systemctl enable httpd
+  #     echo "<h1>Deployed with Terraform</h1>" | sudo tee /var/www/html/index.html
+  #   EOF
 
 
   tags = {
@@ -43,7 +43,9 @@ resource "aws_instance" "control_plane" {
 resource "null_resource" "check_connection" {
 
   provisioner "remote-exec" {
- 
+    inline = [
+      "echo \"Checking connection...\""
+    ]
     connection {
       type        = "ssh"
       user        = "ec2-user"

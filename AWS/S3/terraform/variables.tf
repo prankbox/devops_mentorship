@@ -29,6 +29,10 @@ variable "ssh_key" {
 }
 
 variable "s3_bucket" {
-  type = string
+  type    = string
   default = "pranktool"
+}
+
+variable "instance_type" {
+  default = "t2.micro"
 }

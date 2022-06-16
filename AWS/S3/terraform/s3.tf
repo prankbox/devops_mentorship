@@ -4,7 +4,7 @@ resource "random_string" "suffix" {
 }
 
 locals {
-  s3_bucket_name = "${var.s3_bucket_name}-${random_string.suffix.result}"
+  s3_bucket_name = "${var.s3_bucket}-${random_string.suffix.result}"
 }
 
 resource "aws_s3_bucket" "bucket" {
