@@ -21,7 +21,7 @@ resource "aws_instance" "control_plane" {
   ami                         = data.aws_ami.amazon_linux.id
   instance_type               = var.instance_type
   subnet_id                   = aws_subnet.public_subnet_a.id
-  vpc_security_group_ids      = [aws_security_group.public_a_sg]
+  vpc_security_group_ids      = [aws_security_group.public_a_sg.id]
   availability_zone           = data.aws_availability_zones.available.names[0]
   associate_public_ip_address = true
   key_name                    = aws_key_pair.ssh_key.key_name
