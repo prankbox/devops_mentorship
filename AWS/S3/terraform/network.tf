@@ -45,7 +45,7 @@ resource "aws_security_group" "public_a_sg" {
     name = "Public-SG"
     vpc_id = aws_vpc.main.id
 
-    ingress = {
+    ingress {
       cidr_blocks = [ "0.0.0.0/0" ]
       description = "ssh access"
       from_port = 22
@@ -53,7 +53,7 @@ resource "aws_security_group" "public_a_sg" {
       to_port = 22
     }
 
-    egress = {
+    egress {
         from_port = 0
         to_port = 0
         protocol = "-1"

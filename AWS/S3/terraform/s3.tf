@@ -10,7 +10,7 @@ locals {
 resource "aws_s3_bucket" "bucket" {
   bucket = local.s3_bucket_name
   tags = {
-    "Name"        = local.s3_bucket_name
+    "Name"        = "${local.s3_bucket_name}"
     "Description" = "S3 Bucker for logs"
   }
 }
