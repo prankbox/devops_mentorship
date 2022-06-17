@@ -43,7 +43,7 @@ resource "null_resource" "check_connection" {
       "sudo yum update -y",
       "sudo yum install s3fs-fuse nginx -y",
       "sudo chown -R nginx /var/log/nginx",
-      "sudo echo \"s3fs#${local.s3_bucket_name} /var/log/nginx fuse _netdev,iam_role=S3Full,allow_other,umask=227,uid=995,gid=993,use_cache=/tmp/cache 0 0\" |sudo tee -a /etc/fstab",
+      "sudo echo \"s3fs#${local.s3_bucket_name} /var/log/nginx fuse _netdev,iam_role=S3Full,noatime,sync,allow_other,umask=227,uid=995,gid=993,use_cache=/tmp/cache 0 0\" |sudo tee -a /etc/fstab",
       #"sudo s3fs ${local.s3_bucket_name} /var/log/nginx -o iam_role=S3Full -o allow_other -o use_cache=/tmp/cache",
       "sudo mount -a",
       "sudo systemctl enable nginx --now"
