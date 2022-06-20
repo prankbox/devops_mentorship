@@ -6,6 +6,7 @@
 - [ListS3Buckets](https://github.com/prankbox/devops_mentorship/tree/lambda/AWS/Lambda/ListS3Buckets)
 
 ## Telegram Bot snippet
+
 ```
 def msgSend(text, chat_id):
     url = URL + "sendMessage?text={}&chat_id={}".format(text, chat_id)
@@ -31,4 +32,4 @@ def main(event, context):
     return {
         'something': 'something'
     }
-    ```
+```
