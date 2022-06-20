@@ -4,6 +4,7 @@
 
 - [CreateS3Bucket](https://github.com/prankbox/devops_mentorship/tree/lambda/AWS/Lambda/CreateS3Bucket)
 - [ListS3Buckets](https://github.com/prankbox/devops_mentorship/tree/lambda/AWS/Lambda/ListS3Buckets)
+- [Usefull Link on TG Bot and Lambda](https://medium.com/hackernoon/serverless-telegram-bot-on-aws-lambda-851204d4236c)
 
 ## Telegram Bot snippet
 ```
