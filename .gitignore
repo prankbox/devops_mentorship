@@ -225,3 +225,5 @@ var/
 vendored
 # Serverless directories
 .serverless
+builds/
+
