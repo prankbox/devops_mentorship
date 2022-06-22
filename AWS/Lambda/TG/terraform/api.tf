@@ -63,7 +63,8 @@ resource "null_resource" "bot_webhook" {
     command = <<EOF
         curl --request POST --url https://api.telegram.org/bot${var.token}/setWebhook \
         --header 'content-type: application/json' \
-        --data '{"url":"${aws_apigatewayv2_stage.lambda.invoke_url}/${var.route}}"}'
+        --data '{"url":"${aws_apigatewayv2_stage.lambda.invoke_url}/${var.route}}"}' \
+        
 EOF
   }
   depends_on = [
