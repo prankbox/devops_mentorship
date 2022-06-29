@@ -12,3 +12,9 @@ terraform {
 data "aws_availability_zones" "available" {
   state = "available"
 }
+
+resource "aws_key_pair" "ssh_key" {
+  key_name   = "Server-key"
+  public_key = file(var.mykey)
+
+}
