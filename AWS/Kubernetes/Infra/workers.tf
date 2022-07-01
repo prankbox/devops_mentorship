@@ -15,7 +15,7 @@ data "aws_ami" "ubuntu" {
 }
 
 resource "aws_instance" "control_plane" {
-  count                       = 1
+  count                       = 3
   ami                         = data.aws_ami.ubuntu.id
   instance_type               = "t2.small"
   subnet_id                   = aws_subnet.public_a.id
