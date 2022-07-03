@@ -25,7 +25,7 @@ resource "aws_instance" "control_plane" {
   user_data                   = file("scripts/init.sh")
 
   tags = {
-    "Name" = "UZ-Control-Plane-${count.index + 1}",
+    "Name" = "UZ-Control-Plane-${count.index + 1}"
     "Role" = "Master"
   }
 }
@@ -40,7 +40,7 @@ resource "aws_instance" "workers" {
   key_name                    = aws_key_pair.ssh_key.key_name
   user_data                   = file("scripts/init.sh")
   tags = {
-    "Name" = "UZ-Worker-${count.index + 1}",
+    "Name" = "UZ-Worker-${count.index + 1}"
     "Role" = "Worker"
   }
 }
