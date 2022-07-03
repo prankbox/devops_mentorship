@@ -23,9 +23,9 @@ resource "aws_lb_listener" "this" {
 }
 
 resource "aws_lb_target_group" "this" {
-  for_each = var.ports
+  #for_each = var.ports
 
-  port     = each.value
+  port     = "6443"
   protocol = "TCP"
   vpc_id   = aws_vpc.main.id
 
@@ -44,5 +44,5 @@ resource "aws_autoscaling_attachment" "target" {
   for_each = var.ports
 
   autoscaling_group_name = "masters"
-  lb_target_group_arn   = aws_lb_target_group.this[each.value].arn
+  lb_target_group_arn   = aws_lb_target_group.this.arn
 }
