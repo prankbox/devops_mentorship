@@ -37,3 +37,13 @@ variable "ssh_key" {
   type = string
 
 }
+
+variable "ports" {
+  type    = map(number)
+  default = {
+    http  = 80
+    https = 443
+    tcp = 6443
+  }
+}
+
