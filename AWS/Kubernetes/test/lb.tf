@@ -55,7 +55,7 @@ resource "aws_lb_target_group_attachment" "this" {
 
   depends_on = [
     module.ec2_instance,
-    aws_lb_target_group
+    aws_lb_target_group.this
   ]
 }
 
