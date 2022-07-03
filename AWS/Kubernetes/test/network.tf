@@ -110,24 +110,44 @@ resource "aws_route_table_association" "private_rt_a_acn" {
 }
 
 ############# Public SG ####################
-resource "aws_security_group" "public_sg" {
-  name   = "UZ-Public-SG"
-  vpc_id = aws_vpc.main.id
+# resource "aws_security_group" "public_sg" {
+#   name   = "UZ-Public-SG"
+#   vpc_id = aws_vpc.main.id
 
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = [var.inet_cidr]
-  }
+#   ingress {
+#     from_port   = 22
+#     to_port     = 22
+#     protocol    = "tcp"
+#     cidr_blocks = [var.inet_cidr]
+#   }
 
-  egress {
-    from_port       = 0
-    to_port         = 0
-    protocol        = "-1"
-    cidr_blocks     = [var.inet_cidr]
-    prefix_list_ids = []
-  }
+#   egress {
+#     from_port       = 0
+#     to_port         = 0
+#     protocol        = "-1"
+#     cidr_blocks     = [var.inet_cidr]
+#     prefix_list_ids = []
+#   }
+#   tags = {
+#     "Name" = "UZ-Public-SG"
+#   }
+# }
+
+resource "aws_security_group" "this" {
+  description = "Allow connection between NLB and target"
+  vpc_id      = var.vpc_id
+}
+
+resource "aws_security_group_rule" "ingress" {
+  for_each = var.ports
+
+  security_group_id = aws_security_group.this.id
+  from_port         = each.value
+  to_port           = each.value
+  protocol          = "tcp"
+  type              = "ingress"
+  cidr_blocks       = ["0.0.0.0/0"]
+
   tags = {
     "Name" = "UZ-Public-SG"
   }
