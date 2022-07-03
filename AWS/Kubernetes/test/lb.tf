@@ -44,5 +44,5 @@ resource "aws_autoscaling_attachment" "target" {
   for_each = var.ports
 
   autoscaling_group_name = "masters"
-  alb_target_group_arn   = aws_lb_target_group.this[each.value].arn
+  lb_target_group_arn   = aws_lb_target_group.this[each.value].arn
 }
