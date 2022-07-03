@@ -133,7 +133,7 @@ resource "aws_route_table_association" "private_rt_a_acn" {
 #   }
 # }
 
-resource "aws_security_group" "this" {
+resource "aws_security_group" "public_sg" {
   description = "Allow connection between NLB and target"
   vpc_id      = var.vpc_id
 }
@@ -141,7 +141,7 @@ resource "aws_security_group" "this" {
 resource "aws_security_group_rule" "ingress" {
   for_each = var.ports
 
-  security_group_id = aws_security_group.this.id
+  security_group_id = aws_security_group.public_sg.id
   from_port         = each.value
   to_port           = each.value
   protocol          = "tcp"
