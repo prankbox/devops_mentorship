@@ -19,6 +19,7 @@ resource "aws_instance" "bastion_instance" {
   user_data                   = file("scripts/init.sh")
 
   tags = {
-    "Name" = "UZ-Bastion"
+    "Name" = "UZ-Bastion",
+    "Role" = "Bastion"
   }
 }
