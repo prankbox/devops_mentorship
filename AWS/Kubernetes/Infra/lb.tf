@@ -23,13 +23,10 @@ resource "aws_lb_listener" "this" {
 }
 
 resource "aws_lb_target_group" "this" {
-  #for_each = var.ports
 
   port     = "6443"
   protocol = "TCP"
   vpc_id   = aws_vpc.main.id
-
-  //stickiness = []
 
   depends_on = [
     aws_lb.this
@@ -52,7 +49,6 @@ data "aws_instances" "nlb_insts" {
 resource "aws_lb_target_group_attachment" "this" {
   count            = var.master_count
   target_group_arn = aws_lb_target_group.this.arn
-  #target_id        = data.aws_instances.nlb_insts.ids[count.index]
   target_id = aws_instance.control_plane[count.index].id
   port             = 6443
 
@@ -62,14 +58,3 @@ resource "aws_lb_target_group_attachment" "this" {
     aws_lb_target_group.this
   ]
 }
-
-
-
-
-
-# resource "aws_autoscaling_attachment" "target" {
-#   for_each = var.ports
-
-#   autoscaling_group_name = "masters"
-#   lb_target_group_arn   = aws_lb_target_group.this.arn
-# }
