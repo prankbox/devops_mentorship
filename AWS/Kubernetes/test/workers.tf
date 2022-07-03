@@ -23,7 +23,7 @@ module "ec2_instance" {
   source  = "terraform-aws-modules/ec2-instance/aws"
   version = "~> 3.0"
 
-  count = 2
+  count = var.inst_count
 
   name = "woker-${count.index + 1}"
 

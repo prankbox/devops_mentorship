@@ -37,3 +37,13 @@ variable "ssh_key" {
   type = string
 
 }
+
+variable "master_count" {
+  type    = number
+  default = 3
+}
+
+variable "worker_count" {
+  type = number
+  default = 2
+}
