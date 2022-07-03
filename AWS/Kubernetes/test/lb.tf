@@ -8,16 +8,16 @@ resource "aws_lb" "this" {
 
 
 resource "aws_lb_listener" "this" {
-  for_each = var.ports
+  #for_each = var.ports
 
   load_balancer_arn = aws_lb.this.arn
 
   protocol = "TCP"
-  port     = each.value
+  port     = "6443"
 
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.this[each.key].arn
+    target_group_arn = aws_lb_target_group.this.arn
   }
 
 }
