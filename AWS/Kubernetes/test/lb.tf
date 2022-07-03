@@ -27,7 +27,7 @@ resource "aws_lb_target_group" "this" {
 
   port     = each.value
   protocol = "TCP"
-  vpc_id   = var.vpc_id
+  vpc_id   = aws_vpc.main.id
 
   stickiness = []
 
