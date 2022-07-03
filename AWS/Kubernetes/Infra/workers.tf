@@ -31,7 +31,7 @@ resource "aws_instance" "control_plane" {
 }
 
 resource "aws_instance" "workers" {
-  count                       = 2
+  count                       = var.worker_count
   ami                         = data.aws_ami.ubuntu.id
   instance_type               = "t2.medium"
   subnet_id                   = aws_subnet.public_a.id
