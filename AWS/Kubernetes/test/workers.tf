@@ -15,7 +15,7 @@ data "aws_ami" "ubuntu" {
 }
 
 data "template_file" "user_data" {
-  template = "${file("init.tpl")}"
+  template = "${file("scripts/init.tpl")}"
 }
 
 
