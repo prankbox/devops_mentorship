@@ -46,7 +46,7 @@ data "aws_instances" "nlb_insts" {
 
 resource "aws_lb_target_group_attachment" "this" {
   target_group_arn = aws_lb_target_group.this.arn
-  target_id        = [for sc in range(module.ec2_instance.count) : data.aws_instances.nlb_insts.ids[sc]]
+  target_id        = [for sc in range(var.inst_count) : data.aws_instances.nlb_insts.ids[sc]]
   port             = 6443
 }
 
