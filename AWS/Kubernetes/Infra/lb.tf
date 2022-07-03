@@ -44,18 +44,21 @@ data "aws_instances" "nlb_insts" {
   instance_state_names = ["running"]
 
   depends_on = [
-    module.ec2_instance
+    aws_instance.control_plane,
+    aws_instance.workers
   ]
 }
 
 resource "aws_lb_target_group_attachment" "this" {
   count            = var.master_count
   target_group_arn = aws_lb_target_group.this.arn
-  target_id        = data.aws_instances.nlb_insts.ids[count.index]
+  #target_id        = data.aws_instances.nlb_insts.ids[count.index]
+  target_id = aws_instance.control_plane[count.index].id
   port             = 6443
 
   depends_on = [
-    module.ec2_instance,
+    aws_instance.control_plane,
+    aws_instance.workers,
     aws_lb_target_group.this
   ]
 }
