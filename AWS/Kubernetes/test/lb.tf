@@ -49,8 +49,9 @@ data "aws_instances" "nlb_insts" {
 }
 
 resource "aws_lb_target_group_attachment" "this" {
+  count            = var.inst_count
   target_group_arn = aws_lb_target_group.this.arn
-  target_id        = [for sc in range(var.inst_count) : data.aws_instances.nlb_insts.ids[sc]]
+  target_id        = data.aws_instances.nlb_insts.ids[count.index]
   port             = 6443
 
   depends_on = [

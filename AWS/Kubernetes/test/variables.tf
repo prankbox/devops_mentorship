@@ -48,7 +48,7 @@ variable "ports" {
 }
 
 variable "inst_count" {
-  type = number
+  type    = number
   default = 2
 }
 
