@@ -1,7 +1,7 @@
 resource "aws_lb" "this" {
   name               = "basic-load-balancer"
   load_balancer_type = "network"
-  subnets            = [for subnet in aws_subnet.public_a : subnet.id]
+  subnets            = [aws_subnet.public_a.id]
 
   enable_cross_zone_load_balancing = true
 }
