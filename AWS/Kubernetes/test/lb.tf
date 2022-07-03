@@ -41,13 +41,22 @@ resource "aws_lb_target_group" "this" {
 }
 
 data "aws_instances" "nlb_insts" {
-  instance_state_names = ["running",]
+  instance_state_names = ["running"]
+
+  depends_on = [
+    module.ec2_instance
+  ]
 }
 
 resource "aws_lb_target_group_attachment" "this" {
   target_group_arn = aws_lb_target_group.this.arn
   target_id        = [for sc in range(var.inst_count) : data.aws_instances.nlb_insts.ids[sc]]
   port             = 6443
+
+  depends_on = [
+    module.ec2_instance,
+    aws_lb_target_group
+  ]
 }
 
 # resource "aws_autoscaling_attachment" "target" {
