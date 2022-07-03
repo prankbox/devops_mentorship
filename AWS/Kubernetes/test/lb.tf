@@ -29,7 +29,7 @@ resource "aws_lb_target_group" "this" {
   protocol = "TCP"
   vpc_id   = aws_vpc.main.id
 
-  stickiness = []
+  //stickiness = []
 
   depends_on = [
     aws_lb.this

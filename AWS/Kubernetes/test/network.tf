@@ -135,7 +135,7 @@ resource "aws_route_table_association" "private_rt_a_acn" {
 
 resource "aws_security_group" "public_sg" {
   description = "Allow connection between NLB and target"
-  vpc_id      = var.vpc_id
+  vpc_id      = aws_vpc.main.id
 }
 
 resource "aws_security_group_rule" "ingress" {
