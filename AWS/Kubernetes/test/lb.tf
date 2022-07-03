@@ -40,9 +40,19 @@ resource "aws_lb_target_group" "this" {
   }
 }
 
-resource "aws_autoscaling_attachment" "target" {
-  for_each = var.ports
-
-  autoscaling_group_name = "masters"
-  lb_target_group_arn   = aws_lb_target_group.this.arn
+data "aws_instances" "nlb_insts" {
+  instance_state_names = ["running",]
 }
+
+resource "aws_lb_target_group_attachment" "this" {
+  target_group_arn = aws_lb_target_group.this.arn
+  target_id        = [for sc in range(module.ec2_instance.count) : data.aws_instances.nlb_insts.ids[sc]]
+  port             = 6443
+}
+
+# resource "aws_autoscaling_attachment" "target" {
+#   for_each = var.ports
+
+#   autoscaling_group_name = "masters"
+#   lb_target_group_arn   = aws_lb_target_group.this.arn
+# }
