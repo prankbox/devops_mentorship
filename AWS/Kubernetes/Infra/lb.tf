@@ -49,7 +49,7 @@ data "aws_instances" "nlb_insts" {
 resource "aws_lb_target_group_attachment" "this" {
   count            = var.master_count
   target_group_arn = aws_lb_target_group.this.arn
-  target_id = aws_instance.control_plane[count.index].id
+  target_id        = aws_instance.control_plane[count.index].id
   port             = 6443
 
   depends_on = [

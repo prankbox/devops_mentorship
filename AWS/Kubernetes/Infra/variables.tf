@@ -44,6 +44,6 @@ variable "master_count" {
 }
 
 variable "worker_count" {
-  type = number
+  type    = number
   default = 2
 }
