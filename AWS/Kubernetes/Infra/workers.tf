@@ -24,10 +24,11 @@ resource "aws_instance" "control_plane" {
   key_name                    = aws_key_pair.ssh_key.key_name
   user_data                   = file("scripts/master_init.sh")
 
-  tags = {
-    "Name" = "UZ-Control-Plane-${count.index + 1}"
-    "Role" = "Master"
-  }
+
+tags = {
+  "Name" = "UZ-Control-Plane-${count.index + 1}"
+  "Role" = "Master"
+}
 }
 
 resource "aws_instance" "workers" {
@@ -38,19 +39,10 @@ resource "aws_instance" "workers" {
   vpc_security_group_ids      = [aws_security_group.public_sg.id]
   associate_public_ip_address = true
   key_name                    = aws_key_pair.ssh_key.key_name
-  #user_data                   = file("scripts/worker_init.sh")
+  user_data                   = file("scripts/worker_init.sh")
   tags = {
     "Name" = "UZ-Worker-${count.index + 1}"
     "Role" = "Worker"
   }
 
-   provisioner "remote-exec" {
-    script = "scripts/worker_init.sh"
-    connection {
-      type     = "ssh"
-      user     = "ubuntu"
-      private_key = file(var.ssh_key)
-      host     = self.public_ip
-    }
-  }
 }
