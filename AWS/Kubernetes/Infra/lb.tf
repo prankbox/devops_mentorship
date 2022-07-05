@@ -8,7 +8,6 @@ resource "aws_lb" "this" {
 
 
 resource "aws_lb_listener" "this" {
-  #for_each = var.ports
 
   load_balancer_arn = aws_lb.this.arn
 
