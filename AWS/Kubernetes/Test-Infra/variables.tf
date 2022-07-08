@@ -1,5 +1,7 @@
 
-
+variable "AWS_SSH_KEY_NAME" {
+  description = "Name of the SSH keypair to use in AWS."
+}
 //General Cluster Settings
 
 variable "aws_cluster_name" {

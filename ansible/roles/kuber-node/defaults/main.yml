@@ -1,0 +1,31 @@
+---
+# Edition can be one of: 'ce' (Community Edition) or 'ee' (Enterprise Edition).
+kuber_version: '1.24.2-00'
+
+kubectl: "kubectl={{ kuber_version }}"
+kubeadm: "kubeadm={{ kuber_version }}"
+kubelet: "kubelet={{ kuber_version }}"
+kuber_package_state: present
+kuber_join: true
+kuber_join_command: ""
+
+# Service options.
+kuber_service_state: started
+kuber_service_enabled: true
+kuber_restart_handler_state: restarted
+
+# Used only for Debian/Ubuntu. Switch 'stable' to 'edge' if needed.
+kuber_apt_release_channel: stable
+kuber_apt_arch: amd64
+kuber_apt_repository: "deb https://apt.kubernetes.io/ kubernetes-xenial main"
+kuber_apt_ignore_key_error: true
+kuber_apt_gpg_key: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+
+# Used only for RedHat/CentOS/Fedora.
+kuber_yum_repo_url: https://download.kuber.com/linux/{{ (ansible_distribution == "Fedora") | ternary("fedora","centos") }}/kuber-{{ kuber_edition }}.repo
+kuber_yum_repo_enable_edge: '0'
+kuber_yum_repo_enable_test: '0'
+kuber_yum_gpg_key: https://download.kuber.com/linux/centos/gpg
+
+# A list of users who will be added to the kuber group.
+kuber_users: []

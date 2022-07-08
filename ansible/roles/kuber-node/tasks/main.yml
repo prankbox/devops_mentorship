@@ -1,0 +1,28 @@
+---
+- include_vars: "vars/{{ ansible_facts['os_family'] }}.yml"
+  when: ansible_os_family == 'RedHat'
+
+- include_tasks: setup-RedHat.yml
+  when: ansible_os_family == 'RedHat'
+
+- include_vars: "vars/{{ ansible_facts['os_family'] }}.yml"
+  when: ansible_os_family == 'Debian'
+
+- include_tasks: setup-Debian.yml
+  when: ansible_os_family == 'Debian'
+
+- name: Install Kuber.
+  package:
+    name:
+      - "{{ kubectl }}"
+      - "{{ kubeadm }}"
+      - "{{ kubelet }}"
+ 
+
+
+  #- name: Ensure handlers are notified now to avoid firewall conflicts.
+  # meta: flush_handlers
+
+# - name: Join kuber
+#   shell: "{{ kuber_join_command }}"
+#   when:  kuber_join | bool
