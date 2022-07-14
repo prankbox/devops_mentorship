@@ -1,0 +1,104 @@
+---
+
+- name: Run the equivalent of "apt-get update" as a separate step
+  apt:
+    update_cache: yes
+
+
+
+- name: Add Kuber  apt key.
+  apt_key:
+    url: "{{ kuber_apt_gpg_key }}"
+    #id: 9DC858229FC7DD38854AE2D88D81803C0EBFCD88
+    state: present
+  register: add_repository_key
+  ignore_errors: "{{ kuber_apt_ignore_key_error }}"
+
+
+- name: Ensure curl is present (on older systems without SNI).
+  package: name=curl state=present
+  when: add_repository_key is failed
+
+
+- name: Add Kuber apt key (alternative for older systems without SNI).
+  shell: >
+    curl -sSL {{ kuber_apt_gpg_key }} | sudo apt-key add -
+  args:
+    warn: false
+  when: add_repository_key is failed
+ 
+
+- name: Add Kuber repository.
+  apt_repository:
+    repo: "{{ kuber_apt_repository }}"
+    state: present
+    update_cache: true
+ 
+
+- name: Disable SWAP
+  shell:
+    cmd: |
+      swapoff -a
+  args:
+    executable: /bin/bash
+ 
+#- name: Remove Swap from fstab
+#  mount:
+#    name: swap
+#    fstype: swap
+#    state: absent
+
+- name: Disable SWAP in fstab since kubernetes can't work with swap enabled (2/2)
+  replace:
+    path: /etc/fstab
+    regexp: '^([^#].*?\sswap\s+sw\s+.*)$'
+    replace: '# \1'
+
+    #- name: "update hostnames"
+    #  hostname:
+    #    name: "{{ ansible_hostname }}"
+
+    #- name: Docker restart
+    #  systemd:
+    #    state: restarted
+    #    daemon_reload: yes
+    #    name: docker
+
+- name: Add the overlay module
+  community.general.modprobe:
+    name: overlay
+    state: present
+
+- name: Add the br_netfilter module
+  community.general.modprobe:
+    name: br_netfilter
+    state: present
+
+- name: Copy k8s.conf
+  copy:
+    src: 10-k8s.conf
+    dest: /etc/sysctl.d/10-k8s.conf
+    owner: root
+    group: root
+    mode: '0644'
+
+
+- name: Copy k8s-net.conf
+  copy:
+    src: 10-k8s-net.conf
+    dest: /etc/sysctl.d/10-k8s-net.conf
+    owner: root
+    group: root
+    mode: '0644'
+
+
+- name: Copy ip6-off.conf
+  copy:
+    src: 10-ipv6-off.conf
+    dest: /etc/sysctl.d/10-ipv6-off.conf
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Restart or reload sysctl
+  shell: sysctl --system

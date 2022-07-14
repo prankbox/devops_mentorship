@@ -1,0 +1,38 @@
+---
+- name: Set fact first_kube_control_plane
+  set_fact:
+    first_kube_control_plane: "{{ groups['kube_control_plane']|first }}"
+  run_once: yes
+
+# - name: Print first control plane
+#   debug:
+#     var: first_kube_control_plane
+#   when: inventory_hostname == first_kube_control_plane
+  
+- name: get join command
+  become: yes
+  shell: kubeadm token create --print-join-command
+  register: join_command_raw
+  when: inventory_hostname == first_kube_control_plane
+
+# - name: Print RAW join
+#   debug:
+#     var: join_command_raw.stdout_lines[0]
+#   when: inventory_hostname == first_kube_control_plane
+
+- name: set join command
+  set_fact:
+    join_command: "{{ join_command_raw.stdout_lines[0] | default('') }}"
+  when: inventory_hostname == first_kube_control_plane
+
+
+
+- name: join cluster
+  become: yes
+  shell:  "{{hostvars[groups['kube_control_plane'][0]].join_command}}"
+  args:
+    chdir: $HOME
+    # creates: node_joined.txt
+  when: inventory_hostname != first_kube_control_plane
+
+  

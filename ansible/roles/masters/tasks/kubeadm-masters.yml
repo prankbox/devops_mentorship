@@ -1,0 +1,51 @@
+---
+- name: Set fact first_kube_control_plane
+  set_fact:
+    first_kube_control_plane: "{{ groups['kube_control_plane']|first }}"
+  run_once: yes
+
+- name: kubeadm reset
+  shell: kubeadm reset -f
+  when: inventory_hostname != first_kube_control_plane
+
+- name: get join command
+  become: yes
+  shell: kubeadm token create --print-join-command
+  register: join_command_raw
+  when: inventory_hostname == first_kube_control_plane
+
+- name: set join command
+  set_fact:
+    join_command: "{{ join_command_raw.stdout_lines[0] | default('') }}"
+  when: inventory_hostname == first_kube_control_plane
+
+- name: get token
+  become: yes
+  shell: kubeadm init phase upload-certs --upload-certs
+  register: get_token_raw
+  when: inventory_hostname == first_kube_control_plane
+
+- name: set token
+  set_fact:
+    get_token: "{{ get_token_raw.stdout_lines[-1] | default('') }}"
+  when: inventory_hostname == first_kube_control_plane
+
+- name: Print join command
+  debug:
+    var: join_command
+
+- name: Print token
+  debug:
+    var: get_token
+
+- name: join cluster
+  become: yes
+  shell: >-
+    {{hostvars[groups['kube_control_plane'][0]].join_command }} 
+    --control-plane 
+    --certificate-key {{hostvars[groups['kube_control_plane'][0]].get_token }}
+  args:
+    chdir: $HOME
+    # creates: node_joined.txt
+  when: inventory_hostname != first_kube_control_plane
+

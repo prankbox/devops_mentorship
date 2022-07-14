@@ -1,0 +1,27 @@
+---
+- name: kubeadm | Initialize first master
+  command: >-
+    timeout -k 300s 300s
+    kubeadm init
+    --pod-network-cidr=192.168.0.0/16
+    --ignore-preflight-errors=all
+    --control-plane-endpoint="{{ apiserver_loadbalancer_domain_name }}"
+    --upload-certs
+  register: kubeadm_init
+  # Retry is because upload config sometimes fails
+  retries: 3
+  until: kubeadm_init is succeeded or "field is immutable" in kubeadm_init.stderr
+  when: inventory_hostname == first_kube_control_plane
+
+- name: set kubeadm certificate key
+  set_fact:
+    kubeadm_certificate_key: "{{ item | regex_search('--certificate-key ([^ ]+)','\\1') | first }}"
+  with_items: "{{ hostvars[groups['kube_control_plane'][0]]['kubeadm_init'].stdout_lines | default([]) }}"
+  when:
+    - kubeadm_certificate_key is not defined
+    - (item | trim) is match('.*--certificate-key.*')
+
+- name: Debug
+  debug:
+    var: kubeadm_certificate_key
+  when: inventory_hostname == first_kube_control_plane
