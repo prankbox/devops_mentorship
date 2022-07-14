@@ -1,0 +1,34 @@
+---
+# - name: Tesging command
+#   shell: hostname -i
+#   register: hostname
+
+# - name: Debug message
+#   debug:
+#     var: hostname.stdout
+
+# - name: Set fact first_kube_control_plane
+#   set_fact:
+#     first_kube_control_plane: "{{  groups['kube_control_plane']|first }}"
+
+
+
+# - name: Debug
+#   debug:
+#     var: apiserver_loadbalancer_domain_name
+#   when: inventory_hostname == first_kube_control_plane
+
+# - name: Include define first kube control plane
+#   import_tasks: define-first-kube-control.yml
+
+# - name: Debug message
+#   debug:
+#     var: first_kube_control_plane
+#   when: inventory_hostname == first_kube_control_plane
+
+# - name: Include kubeadm setup
+#   import_tasks: kubeadm-setup.yml
+
+- name: Include kubeadm-master
+  import_tasks: kubeadm-master.yml
+

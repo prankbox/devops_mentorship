@@ -1,0 +1,3 @@
+---
+- name: Include kubeadm-workers
+  import_tasks: kubeadm-workers.yml

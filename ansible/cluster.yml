@@ -4,14 +4,29 @@
   roles:
     - { role: bastion-ssh-config, tags: ["localhost", "bastion"] }
 
-- hosts: kube_node
+- hosts: kube_node, kube_control_plane
   gather_facts: True
   roles:
     - { role: containerd, tags: kube_node}
     - { role: kuber-node, tags: kube_node}
 
-- hosts: kube_control_plane
+
+- hosts: kube_control_plane[0]
+  gather_facts: False
+  roles:
+    - control-plane
+
+- hosts: kube_control_plane, kube_node
   gather_facts: True
   roles:
-    - { role: containerd, tags: kube_control_plane}
-    - { role: kuber-node, tags: kube_control_plane}
+    - workers
+
+- hosts: kube_control_plane
+  gather_facts: False
+  roles:
+    - masters
+
+- hosts: kube_control_plane[0]
+  gather_facts: False
+  roles:
+    - network
