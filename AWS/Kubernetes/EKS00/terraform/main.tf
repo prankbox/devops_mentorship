@@ -86,6 +86,9 @@ module "eks" {
       ipv6_cidr_blocks = ["::/0"]
     }
   }
+  depends_on = [
+    module.vpc
+  ]
 }
 
 # resource "aws_acm_certificate" "kubxr" {
