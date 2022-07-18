@@ -3,5 +3,15 @@ variable "cluster_name" {
 }
 
 variable "cluster_version" {
-  default = "1.22"
+  default = "1.24"
+}
+
+variable "region" {
+  default = "us-east-1"
+}
+
+variable "vpc_cider" {
+  type = string
+  description = "main vpc cider block"
+  default = "10.0.0.0/16"
 }
