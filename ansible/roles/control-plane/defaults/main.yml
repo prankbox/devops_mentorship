@@ -1,2 +1,3 @@
 ---
 # defaults file for control-plane
+pod_cidr: "10.244.0.0/16"
