@@ -10,4 +10,4 @@ docker run \
   --publish 50000:50000 \
   --volume jenkins-data:/var/jenkins_home \
   --volume jenkins-docker-certs:/certs/client:ro \
-  myjenkins-blueocean:2.346.1-1 
+  myjenkins-blueocean:2.346.2-1 
