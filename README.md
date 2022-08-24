@@ -6,7 +6,7 @@
 - EC2
 - VPC
 - RDS
-- Container services
+- ECS
 - EKS
 - Lambda
 
