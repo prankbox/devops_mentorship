@@ -10,6 +10,10 @@ terraform {
     aws = {
       source  = "hashicorp/aws"
       version = "~> 4.16"
+     }
+    null = {
+      source = "hashicorp/null"
+      version = "~>0.3"
     }
   }
 
@@ -148,7 +152,6 @@ resource "aws_instance" "prank-amazon-control" {
 }
 
 resource "null_resource" "index" {
-
   provisioner "remote-exec" {
     inline = [
       "until [ -f /var/www/html/index.html ]; do sleep 5;done",
