@@ -17,6 +17,7 @@ To create resources for each service we use:
 2. Terraform
 3. CloudFormation
 4. Code
+5. VS Code
 
 ## CI/CD Jenkins
 - Continues Inegration
